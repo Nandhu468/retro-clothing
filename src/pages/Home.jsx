@@ -32,11 +32,18 @@ export default function Home() {
     <div>
       {/* HERO */}
       <section className="relative h-[92vh] min-h-[560px] flex items-end">
-        <img
-          src="https://i.pinimg.com/736x/02/8d/bf/028dbf9bc7bd726ab543eccad982fcf6.jpg"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+       <picture className="absolute inset-0 w-full h-full">
+  <source
+    media="(max-width: 768px)"
+    srcSet="/hero-mobile.jpg"
+  />
+
+  <img
+    src="/hero-desktop.jpg"
+    alt="Retro Clothing"
+    className="w-full h-full object-cover"
+  />
+</picture>
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
         <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-10 pb-16 sm:pb-24">
           <p className="text-silver text-xs tracking-widest2 mb-4">RETRO CLOTHING</p>
