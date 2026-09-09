@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative h-[92vh] min-h-[560px] flex items-end">
+      <section className="relative h-[75vh] min-h-[500px] sm:h-[92vh] sm:min-h-[560px] flex items-end overflow-hidden">
        <picture className="absolute inset-0 w-full h-full">
   <source
     media="(max-width: 768px)"
@@ -45,7 +45,7 @@ export default function Home() {
   />
 </picture>
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
-        <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-10 pb-16 sm:pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-10 pb-20 sm:pb-24">
           <p className="text-silver text-xs tracking-widest2 mb-4">RETRO CLOTHING</p>
           <h1 className="font-display text-mist text-6xl sm:text-8xl leading-[0.95] tracking-wide mb-6">
             DEFINE<br />YOUR STYLE.
