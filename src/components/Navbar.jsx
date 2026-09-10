@@ -41,7 +41,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 focus-ring rounded-sm">
+              <Link to="/" className="flex items-center gap-2 focus-ring rounded-sm logo-pulse">
           <img src="/logo.jpg" alt="Retro Clothing" className="h-10 w-10 rounded-full object-cover" />
           <span className="hidden sm:block text-mist font-display text-2xl tracking-widest2 leading-none">
             RETRO

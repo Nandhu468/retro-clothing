@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import ProductCard from '../components/ProductCard'
 import { Instagram, MapPin, Phone } from 'lucide-react'
+import Reveal from '../components/Reveal'
 
 const categories = [
   { key: 'shirts', label: 'SHIRTS', desc: 'Tailored fits built for every occasion.', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1200&auto=format&fit=crop' },
@@ -32,47 +33,43 @@ export default function Home() {
     <div>
       {/* HERO */}
       <section className="relative h-[75vh] min-h-[500px] sm:h-[92vh] sm:min-h-[560px] flex items-end overflow-hidden">
-       <picture className="absolute inset-0 w-full h-full">
-  <source
-    media="(max-width: 768px)"
-    srcSet="/hero-mobile.jpg"
-  />
-
-  <img
-    src="/hero-desktop.jpg"
-    alt="Retro Clothing"
-    className="w-full h-full object-cover"
-  />
-</picture>
+        <picture className="absolute inset-0 w-full h-full">
+          <source media="(max-width: 768px)" srcSet="/hero-mobile.jpg" />
+          <img
+            src="/hero-desktop.jpg"
+            alt="Retro Clothing"
+            className="w-full h-full object-cover"
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
         <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-10 pb-20 sm:pb-24">
-          <p className="text-silver text-xs tracking-widest2 mb-4">RETRO CLOTHING</p>
-          <h1 className="font-display text-mist text-6xl sm:text-8xl leading-[0.95] tracking-wide mb-6">
+                   <p className="text-silver text-xs tracking-widest2 mb-4 animate-rise-1">RETRO CLOTHING</p>
+          <h1 className="font-display text-mist text-6xl sm:text-8xl leading-[0.95] tracking-wide mb-6 animate-rise-2">
             DEFINE<br />YOUR STYLE.
           </h1>
-          <p className="text-silver max-w-md mb-8 text-sm sm:text-base">
+          <p className="text-silver max-w-md mb-8 text-sm sm:text-base animate-rise-3">
             Modern men's fashion designed for confidence, comfort and individuality.
           </p>
-          <div className="flex flex-wrap gap-4">
-            <Link to="/shop" className="bg-mist text-ink px-7 py-3 text-xs tracking-widest2 hover:bg-silver transition-colors duration-250 focus-ring">
+          <div className="flex flex-wrap gap-4 animate-rise-4">
+                        <Link to="/shop" className="bg-mist text-ink px-7 py-3 text-xs tracking-widest2 hover:bg-silver transition-colors duration-250 focus-ring shine-btn">
               SHOP COLLECTION
             </Link>
-            <Link to="/new-arrivals" className="border border-mist text-mist px-7 py-3 text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring">
-              NEW ARRIVALS
-            </Link>
+          <Link to="/new-arrivals" className="border border-mist text-mist px-7 py-3 text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring shine-btn">
+  NEW ARRIVALS
+</Link>
           </div>
         </div>
       </section>
 
       {/* BRAND INTRO */}
-      <section className="max-w-3xl mx-auto text-center px-6 py-24">
+      <Reveal as="section" className="max-w-3xl mx-auto text-center px-6 py-24">
         <p className="text-xs tracking-widest2 text-graphite mb-4">EST. 2026 · TIRUNELVELI</p>
         <h2 className="font-display text-4xl sm:text-5xl tracking-wide mb-6">MINIMAL LUXURY, WORN DAILY</h2>
         <p className="text-graphite leading-relaxed">
           Retro Clothing is a men's fashion label built on restraint — clean silhouettes, considered
           fabrics and a black-and-off-white palette that lets the wearer, not the logo, do the talking.
         </p>
-      </section>
+      </Reveal>
 
       {/* CATEGORY SHOWCASE */}
       <section className="px-4 sm:px-6 pb-24">
@@ -162,13 +159,13 @@ export default function Home() {
         <h2 className="font-display text-3xl tracking-wide mb-2">FOLLOW THE RETRO</h2>
         <p className="text-silver text-sm mb-6">Discover the latest from Retro Clothing.</p>
         <a
-          href="https://www.instagram.com/retroclothing_.in?stkn=Z2Vndnh0dXhyb3Rl"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-block border border-mist px-7 py-3 text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring"
-        >
-          @RETROCLOTHING_.IN
-        </a>
+  href="https://www.instagram.com/retroclothing_.in?stkn=Z2Vndnh0dXhyb3Rl"
+  target="_blank"
+  rel="noreferrer"
+  className="inline-block border border-mist px-7 py-3 text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring"
+>
+  @RETROCLOTHING_.IN
+</a>
       </section>
 
       {/* STORE */}
@@ -198,13 +195,13 @@ export default function Home() {
         <h2 className="font-display text-3xl tracking-wide mb-3">ORDER DIRECTLY ON WHATSAPP</h2>
         <p className="text-silver text-sm mb-6">No accounts, no hassle — just message us your size and we'll confirm.</p>
         <a
-          href="https://wa.me/918667873216"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-block bg-mist text-ink px-7 py-3 text-xs tracking-widest2 hover:bg-silver transition-colors focus-ring"
-        >
-          MESSAGE US
-        </a>
+  href="https://wa.me/918667873216"
+  target="_blank"
+  rel="noreferrer"
+  className="inline-block bg-mist text-ink px-7 py-3 text-xs tracking-widest2 hover:bg-silver transition-colors focus-ring shine-btn"
+>
+  MESSAGE US
+</a>
       </section>
     </div>
   )
