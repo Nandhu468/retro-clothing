@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Heart, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Heart, ChevronLeft, ChevronRight, Ruler, Share2 } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { buildSingleProductMessage, whatsappLink } from '../lib/whatsapp'
 import StockBadge from '../components/StockBadge'
+import { animateItemToCart } from '../lib/cartAnimations'
 
 export default function ProductPage() {
   const { slug } = useParams()
@@ -15,6 +16,11 @@ export default function ProductPage() {
   const [size, setSize] = useState('')
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
+  const [relatedProducts, setRelatedProducts] = useState([])
+  const [recentlyViewed, setRecentlyViewed] = useState([])
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false)
+  const [shareStatus, setShareStatus] = useState('')
+  const productImageRef = useRef(null)
 
   const { addItem } = useCart()
   const { toggle, isWishlisted } = useWishlist()
@@ -31,6 +37,37 @@ export default function ProductPage() {
     }
     load()
   }, [slug])
+
+  useEffect(() => {
+    if (!product) return undefined
+
+    document.title = `${product.name} | Retro Clothing`
+    const description = document.querySelector('meta[name="description"]')
+    if (description && product.description) description.setAttribute('content', product.description)
+
+    try {
+      const stored = JSON.parse(localStorage.getItem('retro_recent_products_v1') || '[]')
+      const next = [product, ...stored.filter((item) => item.id !== product.id)].slice(0, 8)
+      localStorage.setItem('retro_recent_products_v1', JSON.stringify(next))
+      setRecentlyViewed(next.filter((item) => item.id !== product.id).slice(0, 4))
+    } catch {
+      setRecentlyViewed([])
+    }
+
+    let active = true
+    async function loadRelatedProducts() {
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .eq('published', true)
+        .eq('category', product.category)
+        .neq('id', product.id)
+        .limit(4)
+      if (active) setRelatedProducts(data || [])
+    }
+    loadRelatedProducts()
+    return () => { active = false }
+  }, [product])
 
   if (loading) {
     return <div className="max-w-6xl mx-auto px-4 pt-32 pb-24"><div className="skeleton h-[60vh] w-full" /></div>
@@ -53,8 +90,31 @@ export default function ProductPage() {
   function handleAddToCart() {
     if (product.sizes?.length && !size) return
     addItem(product, size, qty)
+    animateItemToCart({
+      sourceElement: productImageRef.current,
+      imageSrc: images[activeImg]?.url,
+    })
     setAdded(true)
     setTimeout(() => setAdded(false), 1800)
+  }
+
+  async function handleShare() {
+    const shareData = {
+      title: `${product.name} | Retro Clothing`,
+      text: `Take a look at ${product.name} from Retro Clothing.`,
+      url: window.location.href,
+    }
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData)
+        return
+      }
+      await navigator.clipboard.writeText(window.location.href)
+      setShareStatus('LINK COPIED')
+      window.setTimeout(() => setShareStatus(''), 1800)
+    } catch {
+      // A user can dismiss the native share sheet without an error state in the UI.
+    }
   }
 
   return (
@@ -64,7 +124,7 @@ export default function ProductPage() {
         <div>
           <div className="relative aspect-[3/4] bg-bone overflow-hidden">
             {images[activeImg]?.url ? (
-              <img src={images[activeImg].url} alt={product.name} className="w-full h-full object-cover" />
+              <img ref={productImageRef} src={images[activeImg].url} alt={product.name} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-silver text-sm">No image available</div>
             )}
@@ -115,7 +175,17 @@ export default function ProductPage() {
 
           {product.sizes?.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-xs tracking-widest2 text-graphite mb-2">SIZE</h3>
+              <div className="flex items-center justify-between gap-4 mb-2">
+                <h3 className="text-xs tracking-widest2 text-graphite">SIZE</h3>
+                <button
+                  type="button"
+                  onClick={() => setSizeGuideOpen((open) => !open)}
+                  className="inline-flex min-h-8 items-center gap-1 text-[10px] tracking-widest2 text-graphite hover:text-ink focus-ring"
+                  aria-expanded={sizeGuideOpen}
+                >
+                  <Ruler size={14} /> SIZE GUIDE
+                </button>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((s) => (
                   <button
@@ -127,6 +197,19 @@ export default function ProductPage() {
                   </button>
                 ))}
               </div>
+              {sizeGuideOpen && (
+                <div className="mt-4 border border-bone p-4 text-sm text-graphite">
+                  <p className="text-xs tracking-widest2 text-ink mb-3">GENERAL SIZE GUIDE</p>
+                  <div className="grid grid-cols-3 gap-y-2 text-xs">
+                    <span className="text-ink">SIZE</span><span className="text-ink">CHEST</span><span className="text-ink">FIT</span>
+                    <span>S</span><span>36–38 in</span><span>Regular</span>
+                    <span>M</span><span>38–40 in</span><span>Regular</span>
+                    <span>L</span><span>40–42 in</span><span>Regular</span>
+                    <span>XL</span><span>42–44 in</span><span>Regular</span>
+                  </div>
+                  <p className="mt-3 text-xs leading-relaxed">Fit can vary by style. Message us on WhatsApp for exact garment measurements.</p>
+                </div>
+              )}
             </div>
           )}
 
@@ -168,6 +251,13 @@ export default function ProductPage() {
               <Heart size={14} className={isWishlisted(product.id) ? 'fill-ink text-ink' : ''} />
               {isWishlisted(product.id) ? 'IN WISHLIST' : 'ADD TO WISHLIST'}
             </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex items-center justify-center gap-2 py-2 text-xs tracking-widest2 text-graphite hover:text-ink focus-ring"
+            >
+              <Share2 size={14} /> {shareStatus || 'SHARE PRODUCT'}
+            </button>
           </div>
 
           {(product.sizes?.length || product.fabric || product.fit || product.care) && (
@@ -181,6 +271,45 @@ export default function ProductPage() {
           )}
         </div>
       </div>
+
+      {relatedProducts.length > 0 && (
+        <section className="mt-20 border-t border-bone pt-10">
+          <div className="flex items-end justify-between gap-4 mb-6">
+            <div>
+              <p className="text-xs tracking-widest2 text-graphite mb-2">COMPLETE THE LOOK</p>
+              <h2 className="font-display text-3xl tracking-wide">YOU MAY ALSO LIKE</h2>
+            </div>
+            <Link to={`/shop/${product.category}`} className="shrink-0 text-xs tracking-widest2 border-b border-ink pb-0.5 focus-ring">VIEW ALL</Link>
+          </div>
+          <ProductRail products={relatedProducts} />
+        </section>
+      )}
+
+      {recentlyViewed.length > 0 && (
+        <section className="mt-16 border-t border-bone pt-10">
+          <p className="text-xs tracking-widest2 text-graphite mb-2">PICK UP WHERE YOU LEFT OFF</p>
+          <h2 className="font-display text-3xl tracking-wide mb-6">RECENTLY VIEWED</h2>
+          <ProductRail products={recentlyViewed} />
+        </section>
+      )}
+    </div>
+  )
+}
+
+function ProductRail({ products }) {
+  return (
+    <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory md:grid md:grid-cols-4 md:overflow-visible">
+      {products.map((item) => (
+        <div key={item.id} className="w-[min(58vw,230px)] shrink-0 snap-start md:w-auto">
+          <Link to={`/product/${item.slug}`} className="block focus-ring">
+            <div className="aspect-[3/4] bg-bone overflow-hidden">
+              {item.images?.[0]?.url && <img src={item.images[0].url} alt={item.name} className="w-full h-full object-cover" loading="lazy" />}
+            </div>
+            <p className="mt-3 text-sm font-medium text-ink truncate">{item.name}</p>
+            <p className="mt-1 text-sm text-graphite">₹{Number(item.price).toFixed(0)}</p>
+          </Link>
+        </div>
+      ))}
     </div>
   )
 }

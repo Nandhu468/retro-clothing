@@ -4,15 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#0a0a0a',
-        charcoal: '#161616',
-        graphite: '#2a2a2a',
-        mist: '#f4f3f0',
-        bone: '#eae7e0',
-        silver: '#b9b6ad',
+        ink: '#1c130d',
+        charcoal: '#342116',
+        graphite: '#56351b',
+        mist: '#f3dfae',
+        bone: '#d8b76f',
+        silver: '#bf9150',
       },
       fontFamily: {
-        display: ['"Bebas Neue"', 'Oswald', 'sans-serif'],
+        display: ['Bungee', '"Bebas Neue"', 'Oswald', 'sans-serif'],
         body: ['"Inter"', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const WishlistContext = createContext(null)
 const STORAGE_KEY = 'retro_wishlist_v1'

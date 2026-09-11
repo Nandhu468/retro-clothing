@@ -67,7 +67,7 @@ export default function Shop() {
         <h1 className="font-display text-4xl sm:text-5xl tracking-wide">{title}</h1>
         <button
           onClick={() => setFilterOpen(true)}
-          className="md:hidden flex items-center gap-2 text-xs tracking-widest2 border border-ink px-4 py-2 focus-ring"
+          className="md:hidden flex items-center gap-2 text-xs tracking-widest2 text-white border border-white px-4 py-2 focus-ring"
         >
           <SlidersHorizontal size={14} /> FILTER
         </button>

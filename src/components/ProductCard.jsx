@@ -17,7 +17,7 @@ export default function ProductCard({ product }) {
               <img
                 src={primary}
                 alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-400 group-hover:opacity-0"
+                className="absolute inset-0 w-full h-full object-cover"
                 loading="lazy"
               />
               {secondary && (
@@ -42,19 +42,6 @@ export default function ProductCard({ product }) {
             )}
           </div>
 
-          <button
-            aria-label="Toggle wishlist"
-            onClick={(e) => {
-              e.preventDefault()
-              toggle(product)
-            }}
-            className="absolute top-2 right-2 bg-mist/90 rounded-full p-2 focus-ring"
-          >
-            <Heart
-              size={16}
-              className={isWishlisted(product.id) ? 'fill-ink text-ink' : 'text-ink'}
-            />
-          </button>
         </div>
 
         <div className="mt-3 space-y-1">
@@ -65,6 +52,17 @@ export default function ProductCard({ product }) {
           </div>
         </div>
       </Link>
+      <button
+        type="button"
+        aria-label={`Toggle ${product.name} wishlist`}
+        onClick={() => toggle(product)}
+        className="absolute top-2 right-2 bg-mist/90 rounded-full p-2 focus-ring"
+      >
+        <Heart
+          size={16}
+          className={isWishlisted(product.id) ? 'fill-ink text-ink' : 'text-ink'}
+        />
+      </button>
     </div>
   )
 }

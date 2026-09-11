@@ -1,14 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Search, Heart, ShoppingBag, Menu, X } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 
 const links = [
   { to: '/', label: 'HOME' },
-  { to: '/shop', label: 'SHOP' },
+  { to: '/shop', label: 'ALL COLLECTION' },
   { to: '/new-arrivals', label: 'NEW ARRIVALS' },
-  { to: '/about', label: 'ABOUT' },
+  { to: '/about', label: 'OUR STORY' },
+]
+
+const mobileLinks = [
+  ...links,
+  { to: '/shop/shirts', label: 'SHIRTS' },
+  { to: '/shop/t-shirts', label: 'TEES' },
+  { to: '/shop/pants', label: 'PANTS' },
+  { to: '/#store', label: 'TIRUNELVELI' },
+  { to: '/contact', label: 'CONTACT' },
 ]
 
 export default function Navbar() {
@@ -18,13 +27,16 @@ export default function Navbar() {
   const [query, setQuery] = useState('')
   const { count } = useCart()
   const { items: wishItems } = useWishlist()
+  const { pathname } = useLocation()
   const navigate = useNavigate()
+  const isHomePage = pathname === '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [pathname])
 
   function submitSearch(e) {
     e.preventDefault()
@@ -37,7 +49,9 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-400 ${
-        scrolled ? 'bg-ink/95 backdrop-blur-sm py-2 shadow-lg shadow-black/20' : 'bg-transparent py-5'
+        isHomePage && !scrolled
+          ? 'bg-transparent py-5'
+          : 'bg-ink/95 backdrop-blur-sm py-2 shadow-lg shadow-black/20'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between">
@@ -65,15 +79,15 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-4 sm:gap-5 text-mist">
+        <div className="flex items-center gap-3 sm:gap-5 text-mist">
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
-            className="hover:text-silver transition-colors focus-ring rounded-sm"
+            className="min-w-11 min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
           >
             <Search size={19} />
           </button>
-          <Link to="/wishlist" aria-label="Wishlist" className="relative hover:text-silver transition-colors focus-ring rounded-sm">
+          <Link to="/wishlist" aria-label="Wishlist" className="relative hidden sm:block hover:text-silver transition-colors focus-ring rounded-sm">
             <Heart size={19} />
             {wishItems.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
@@ -81,7 +95,7 @@ export default function Navbar() {
               </span>
             )}
           </Link>
-          <Link to="/cart" aria-label="Cart" className="relative hover:text-silver transition-colors focus-ring rounded-sm">
+          <Link to="/cart" aria-label="Cart" data-cart-icon className="relative hover:text-silver transition-colors focus-ring rounded-sm">
             <ShoppingBag size={19} />
             {count > 0 && (
               <span className="absolute -top-2 -right-2 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
@@ -91,7 +105,7 @@ export default function Navbar() {
           </Link>
           <button
             aria-label="Menu"
-            className="md:hidden hover:text-silver transition-colors focus-ring rounded-sm"
+            className="md:hidden min-w-11 min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
             onClick={() => setMenuOpen(true)}
           >
             <Menu size={22} />
@@ -101,21 +115,21 @@ export default function Navbar() {
 
       {/* Mobile full-screen menu */}
       {menuOpen && (
-        <div className="fixed inset-0 bg-ink z-50 flex flex-col">
+        <div className="mobile-menu fixed inset-0 bg-ink z-50 flex flex-col">
           <div className="flex items-center justify-between px-5 py-5">
             <img src="/logo.jpg" alt="Retro Clothing" className="h-9 w-9 rounded-full object-cover" />
             <button aria-label="Close menu" onClick={() => setMenuOpen(false)} className="text-mist focus-ring rounded-sm">
               <X size={24} />
             </button>
           </div>
-          <nav className="flex flex-col gap-8 px-8 mt-10">
-            {links.map((l) => (
+          <nav className="flex flex-col gap-5 px-8 mt-8 overflow-y-auto pb-8">
+            {mobileLinks.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 end={l.to === '/'}
                 onClick={() => setMenuOpen(false)}
-                className="text-mist text-3xl font-display tracking-wide"
+                className="text-mist text-3xl sm:text-4xl font-display tracking-wide py-1"
               >
                 {l.label}
               </NavLink>

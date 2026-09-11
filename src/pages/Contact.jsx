@@ -1,4 +1,4 @@
-import { Phone, Mail, Instagram, MapPin, MessageCircle } from 'lucide-react'
+import { Clock3, Phone, Mail, Instagram, MapPin, MessageCircle } from 'lucide-react'
 
 const actions = [
   { label: 'CALL', href: 'tel:7358274739', icon: Phone },
@@ -21,6 +21,7 @@ export default function Contact() {
         <p>WhatsApp: +91 86678 73216</p>
         <p>Email: retroclothingtvl@gmail.com</p>
         <p>Instagram: @retroclothing_.in</p>
+        <p className="flex items-center gap-2"><Clock3 size={15} /> Store hours: Saturday &amp; Sunday, 6 PM – 10 PM</p>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

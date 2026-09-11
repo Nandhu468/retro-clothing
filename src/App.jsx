@@ -3,7 +3,10 @@ import { useEffect } from 'react'
 import AnnouncementBar from './components/AnnouncementBar'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import IntroScreen from './components/IntroScreen'
+import MobileCommerceActions from './components/MobileCommerceActions'
 import ProtectedAdminRoute from './components/ProtectedAdminRoute'
+import ScrollToTopButton from './components/ScrollToTopButton'
 
 import Home from './pages/Home'
 import Shop from './pages/Shop'
@@ -24,25 +27,39 @@ import AdminStock from './pages/admin/AdminStock'
 import AdminSettings from './pages/admin/AdminSettings'
 
 function StorefrontLayout({ children }) {
+  const { pathname } = useLocation()
   return (
     <>
       <AnnouncementBar />
       <Navbar />
-      <main>{children}</main>
+      <main key={pathname} className="storefront-main">{children}</main>
       <Footer />
+      <MobileCommerceActions />
+      <ScrollToTopButton />
     </>
   )
 }
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  const { pathname, hash } = useLocation()
+
+  useEffect(() => {
+    if (hash) {
+      requestAnimationFrame(() => {
+        document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+      return
+    }
+
+    window.scrollTo(0, 0)
+  }, [pathname, hash])
   return null
 }
 
 export default function App() {
   return (
     <>
+      <IntroScreen />
       <ScrollToTop />
       <Routes>
         {/* Storefront */}

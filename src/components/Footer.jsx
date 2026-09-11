@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Instagram, Phone, Mail, MapPin } from 'lucide-react'
+import { Clock3, Instagram, Phone, Mail, MapPin } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -45,6 +45,7 @@ export default function Footer() {
             <li className="flex items-center gap-2"><Mail size={14} /> <a href="mailto:retroclothingtvl@gmail.com" className="hover:text-silver break-all">retroclothingtvl@gmail.com</a></li>
             <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5 shrink-0" /> <span>33/A Mela Mount Road, Rajiv Gandhi Nagar, Valukodai, Tirunelveli, TN – 627006</span></li>
             <li className="flex items-center gap-2"><Instagram size={14} /> <a href="https://www.instagram.com/retroclothing_.in?stkn=Z2Vndnh0dXhyb3Rl" target="_blank" rel="noreferrer" className="hover:text-silver">@retroclothing_.in</a></li>
+            <li className="flex items-start gap-2"><Clock3 size={14} className="mt-0.5 shrink-0" /> <span>Saturday &amp; Sunday, 6 PM – 10 PM</span></li>
           </ul>
         </div>
       </div>

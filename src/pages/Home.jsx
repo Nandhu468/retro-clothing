@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import ProductCard from '../components/ProductCard'
-import { Instagram, MapPin, Phone } from 'lucide-react'
+import { Clock3, Instagram, MapPin, Phone } from 'lucide-react'
 import Reveal from '../components/Reveal'
 
 const categories = [
@@ -32,29 +32,30 @@ export default function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative h-[75vh] min-h-[500px] sm:h-[92vh] sm:min-h-[560px] flex items-end overflow-hidden">
+      <section className="home-hero relative h-[78svh] min-h-[500px] sm:h-[92vh] sm:min-h-[560px] flex items-end overflow-hidden">
         <picture className="absolute inset-0 w-full h-full">
           <source media="(max-width: 768px)" srcSet="/hero-mobile.jpg" />
           <img
             src="/hero-desktop.jpg"
             alt="Retro Clothing"
-            className="w-full h-full object-cover"
+            className="home-hero-image w-full h-full object-cover"
+            fetchPriority="high"
           />
         </picture>
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
-        <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-10 pb-20 sm:pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto w-full px-5 sm:px-10 pb-16 sm:pb-24">
                    <p className="text-silver text-xs tracking-widest2 mb-4 animate-rise-1">RETRO CLOTHING</p>
-          <h1 className="font-display text-mist text-6xl sm:text-8xl leading-[0.95] tracking-wide mb-6 animate-rise-2">
+          <h1 className="font-display text-mist text-5xl min-[375px]:text-6xl sm:text-8xl leading-[0.95] tracking-wide mb-5 sm:mb-6 animate-rise-2">
             DEFINE<br />YOUR STYLE.
           </h1>
           <p className="text-silver max-w-md mb-8 text-sm sm:text-base animate-rise-3">
             Modern men's fashion designed for confidence, comfort and individuality.
           </p>
-          <div className="flex flex-wrap gap-4 animate-rise-4">
-                        <Link to="/shop" className="bg-mist text-ink px-7 py-3 text-xs tracking-widest2 hover:bg-silver transition-colors duration-250 focus-ring shine-btn">
+          <div className="flex flex-col min-[375px]:flex-row gap-3 sm:gap-4 animate-rise-4">
+                        <Link to="/shop" className="bg-mist text-ink px-6 py-3.5 text-center text-xs tracking-widest2 hover:bg-silver transition-colors duration-250 focus-ring shine-btn">
               SHOP COLLECTION
             </Link>
-          <Link to="/new-arrivals" className="border border-mist text-mist px-7 py-3 text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring shine-btn">
+          <Link to="/new-arrivals" className="border border-mist text-mist px-6 py-3.5 text-center text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring shine-btn">
   NEW ARRIVALS
 </Link>
           </div>
@@ -72,7 +73,7 @@ export default function Home() {
       </Reveal>
 
       {/* CATEGORY SHOWCASE */}
-      <section className="px-4 sm:px-6 pb-24">
+      <Reveal as="section" className="px-4 sm:px-6 pb-24">
         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-4">
           {categories.map((c) => (
             <Link key={c.key} to={`/shop/${c.key}`} className="group relative aspect-[3/4] overflow-hidden block focus-ring">
@@ -88,12 +89,13 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       {/* FEATURED */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
+      <Reveal as="section" className="collection-surface max-w-7xl mx-auto px-4 py-12 sm:px-8 sm:py-16 mb-24">
         <div className="flex items-end justify-between mb-8">
           <div>
+            <p className="section-index">01 / SELECTED PIECES</p>
             <h2 className="font-display text-4xl tracking-wide">THE EDIT</h2>
             <p className="text-graphite text-sm mt-1">Pieces selected for your everyday rotation.</p>
           </div>
@@ -107,13 +109,13 @@ export default function Home() {
             {featured.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         )}
-      </section>
+      </Reveal>
 
       {/* NEW ARRIVALS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
+      <Reveal as="section" className="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
         <div className="flex items-end justify-between mb-8">
           <h2 className="font-display text-4xl tracking-wide">NEW ARRIVALS</h2>
-          <Link to="/new-arrivals" className="text-xs tracking-widest2 border-b border-ink pb-0.5 hover:opacity-60">
+          <Link to="/new-arrivals" className="text-xs tracking-widest2 text-white border-b border-white pb-0.5 hover:opacity-70">
             VIEW ALL
           </Link>
         </div>
@@ -126,14 +128,15 @@ export default function Home() {
             {newArrivals.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         )}
-      </section>
+      </Reveal>
 
       {/* EDITORIAL BANNER */}
-      <section className="relative h-[70vh] min-h-[420px] flex items-center">
+      <Reveal as="section" className="editorial-banner relative h-[65svh] min-h-[420px] flex items-center">
         <img
           src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=1800&auto=format&fit=crop"
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+          className="editorial-image absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-ink/50" />
         <div className="relative z-10 max-w-xl px-6 sm:px-10">
@@ -142,19 +145,19 @@ export default function Home() {
             Every piece is chosen for how it moves, fits and lasts — fashion built for real days, not just photos.
           </p>
         </div>
-      </section>
+      </Reveal>
 
       {/* BRAND PHILOSOPHY */}
-      <section className="max-w-4xl mx-auto text-center px-6 py-24">
+      <Reveal as="section" className="max-w-4xl mx-auto text-center px-6 py-24">
         <h2 className="font-display text-4xl tracking-wide mb-6">LESS, BUT BETTER</h2>
         <p className="text-graphite leading-relaxed">
           We'd rather make one shirt well than ten shirts fast. Retro Clothing exists for men who
           want their wardrobe to feel deliberate — a small, confident collection instead of endless noise.
         </p>
-      </section>
+      </Reveal>
 
       {/* INSTAGRAM */}
-      <section className="bg-charcoal text-mist py-20 px-6 text-center">
+      <Reveal as="section" className="bg-charcoal text-mist py-20 px-6 text-center">
         <Instagram size={28} className="mx-auto mb-4 text-silver" />
         <h2 className="font-display text-3xl tracking-wide mb-2">FOLLOW THE RETRO</h2>
         <p className="text-silver text-sm mb-6">Discover the latest from Retro Clothing.</p>
@@ -166,29 +169,32 @@ export default function Home() {
 >
   @RETROCLOTHING_.IN
 </a>
-      </section>
+      </Reveal>
 
       {/* STORE */}
-      <section className="max-w-5xl mx-auto px-6 py-24 grid sm:grid-cols-2 gap-10 items-center">
+      <Reveal as="section" id="store" className="max-w-5xl mx-auto px-6 py-24 grid sm:grid-cols-2 gap-10 items-center scroll-mt-20">
         <div>
           <h2 className="font-display text-4xl tracking-wide mb-4">VISIT THE STORE</h2>
           <p className="text-graphite text-sm flex items-start gap-2 mb-6">
             <MapPin size={16} className="mt-0.5 shrink-0" />
             33/A Mela Mount Road, Rajiv Gandhi Nagar, Valukodai, Tirunelveli, Tamil Nadu – 627006
           </p>
+          <p className="text-graphite text-sm flex items-center gap-2 mb-6">
+            <Clock3 size={16} className="shrink-0" /> Saturday &amp; Sunday, 6 PM – 10 PM
+          </p>
           <div className="flex flex-wrap gap-3">
             <a href="https://maps.app.goo.gl/86kZcDQkkMHZznqq7?g_st=ac" target="_blank" rel="noreferrer" className="bg-ink text-mist px-5 py-2.5 text-xs tracking-widest2 hover:bg-graphite transition-colors">
               GET DIRECTIONS
             </a>
-            <a href="tel:7358274739" className="border border-ink px-5 py-2.5 text-xs tracking-widest2 hover:bg-ink hover:text-mist transition-colors inline-flex items-center gap-2">
+            <a href="tel:7358274739" className="border border-white text-white px-5 py-2.5 text-xs tracking-widest2 hover:bg-ink hover:text-mist transition-colors inline-flex items-center gap-2">
               <Phone size={13} /> CALL STORE
             </a>
           </div>
         </div>
         <div className="aspect-video bg-bone overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1200&auto=format&fit=crop" alt="Store" className="w-full h-full object-cover" />
+          <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1200&auto=format&fit=crop" alt="Retro Clothing store" className="w-full h-full object-cover" loading="lazy" />
         </div>
-      </section>
+      </Reveal>
 
       {/* WHATSAPP CTA */}
       <section className="bg-ink text-mist text-center py-16 px-6">
