@@ -2,11 +2,21 @@ import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import { useWishlist } from '../context/WishlistContext'
 import StockBadge from './StockBadge'
+import { useCart } from '../context/CartContext'
+import { animateItemToCart } from '../lib/cartAnimations'
 
 export default function ProductCard({ product }) {
   const { toggle, isWishlisted } = useWishlist()
+  const { addItem } = useCart()
   const primary = product.images?.[0]?.url
   const secondary = product.images?.[1]?.url
+
+  function handleQuickAdd(event) {
+    event.preventDefault()
+    if (product.stock <= 0) return
+    addItem(product, product.sizes?.[0] || '', 1)
+    animateItemToCart({ sourceElement: event.currentTarget.parentElement.querySelector('img'), imageSrc: primary })
+  }
 
   return (
     <div className="group relative">
@@ -52,6 +62,14 @@ export default function ProductCard({ product }) {
           </div>
         </div>
       </Link>
+      <button
+        type="button"
+        onClick={handleQuickAdd}
+        disabled={product.stock <= 0}
+        className="mt-3 w-full border border-bone text-mist py-2.5 text-[10px] tracking-widest2 hover:bg-mist hover:text-ink disabled:opacity-40 focus-ring"
+      >
+        {product.stock > 0 ? 'QUICK ADD' : 'SOLD OUT'}
+      </button>
       <button
         type="button"
         aria-label={`Toggle ${product.name} wishlist`}

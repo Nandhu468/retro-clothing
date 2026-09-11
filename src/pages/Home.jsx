@@ -1,232 +1,72 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Instagram, MapPin, Phone } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import ProductCard from '../components/ProductCard'
-import { Clock3, Instagram, MapPin, Phone } from 'lucide-react'
 import Reveal from '../components/Reveal'
 
 const categories = [
-  { key: 'shirts', label: 'SHIRTS', desc: 'Tailored fits built for every occasion.', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1200&auto=format&fit=crop' },
-  { key: 't-shirts', label: 'T-SHIRTS', desc: 'Everyday essentials, elevated.', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop' },
-  { key: 'pants', label: 'PANTS', desc: 'Structured comfort from day to night.', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=1200&auto=format&fit=crop' },
+  { key: 'shirts', label: 'SHIRTS', desc: 'Classic cuts. Everyday presence.' },
+  { key: 't-shirts', label: 'TEES', desc: 'Essential layers, considered.' },
+  { key: 'pants', label: 'PANTS', desc: 'Built to complete the look.' },
 ]
 
 export default function Home() {
   const [featured, setFeatured] = useState([])
   const [newArrivals, setNewArrivals] = useState([])
+  const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let active = true
     async function load() {
-      const [{ data: f }, { data: n }] = await Promise.all([
+      const [{ data: featuredData }, { data: newData }, { data: allData }] = await Promise.all([
         supabase.from('products').select('*').eq('published', true).eq('featured', true).limit(4),
         supabase.from('products').select('*').eq('published', true).eq('new_arrival', true).order('created_at', { ascending: false }).limit(8),
+        supabase.from('products').select('*').eq('published', true).limit(50),
       ])
-      setFeatured(f || [])
-      setNewArrivals(n || [])
+      if (!active) return
+      setFeatured(featuredData || [])
+      setNewArrivals(newData || [])
+      setProducts(allData || [])
       setLoading(false)
     }
     load()
+    return () => { active = false }
   }, [])
 
-  return (
-    <div>
-      {/* HERO */}
-      <section className="home-hero relative h-[78svh] min-h-[500px] sm:h-[92vh] sm:min-h-[560px] flex items-end overflow-hidden">
-        <picture className="absolute inset-0 w-full h-full">
-          <source media="(max-width: 768px)" srcSet="/hero-mobile.jpg" />
-          <img
-            src="/hero-desktop.jpg"
-            alt="Retro Clothing"
-            className="home-hero-image w-full h-full object-cover"
-            fetchPriority="high"
-          />
-        </picture>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
-        <div className="relative z-10 max-w-7xl mx-auto w-full px-5 sm:px-10 pb-16 sm:pb-24">
-                   <p className="text-silver text-xs tracking-widest2 mb-4 animate-rise-1">RETRO CLOTHING</p>
-          <h1 className="font-display text-mist text-5xl min-[375px]:text-6xl sm:text-8xl leading-[0.95] tracking-wide mb-5 sm:mb-6 animate-rise-2">
-            DEFINE<br />YOUR STYLE.
-          </h1>
-          <p className="text-silver max-w-md mb-8 text-sm sm:text-base animate-rise-3">
-            Modern men's fashion designed for confidence, comfort and individuality.
-          </p>
-          <div className="flex flex-col min-[375px]:flex-row gap-3 sm:gap-4 animate-rise-4">
-                        <Link to="/shop" className="bg-mist text-ink px-6 py-3.5 text-center text-xs tracking-widest2 hover:bg-silver transition-colors duration-250 focus-ring shine-btn">
-              SHOP COLLECTION
-            </Link>
-          <Link to="/new-arrivals" className="border border-mist text-mist px-6 py-3.5 text-center text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring shine-btn">
-  NEW ARRIVALS
-</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* BRAND INTRO */}
-      <Reveal as="section" className="max-w-3xl mx-auto text-center px-6 py-24">
-        <p className="text-xs tracking-widest2 text-graphite mb-4">EST. 2026 · TIRUNELVELI</p>
-        <h2 className="font-display text-4xl sm:text-5xl tracking-wide mb-6">MINIMAL LUXURY, WORN DAILY</h2>
-        <p className="text-graphite leading-relaxed">
-          Retro Clothing is a men's fashion label built on restraint — clean silhouettes, considered
-          fabrics and a black-and-off-white palette that lets the wearer, not the logo, do the talking.
-        </p>
-      </Reveal>
-
-      {/* CATEGORY SHOWCASE */}
-      <Reveal as="section" className="px-4 sm:px-6 pb-24">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-4">
-          {categories.map((c) => (
-            <Link key={c.key} to={`/shop/${c.key}`} className="group relative aspect-[3/4] overflow-hidden block focus-ring">
-              <img src={c.img} alt={c.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-400 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-ink/40 group-hover:bg-ink/55 transition-colors duration-400" />
-              <div className="absolute inset-0 flex flex-col justify-end p-6">
-                <h3 className="font-display text-mist text-3xl tracking-wide">{c.label}</h3>
-                <p className="text-silver text-sm mt-1 mb-3">{c.desc}</p>
-                <span className="text-mist text-xs tracking-widest2 inline-flex items-center gap-2">
-                  EXPLORE <span className="transition-transform duration-250 group-hover:translate-x-1">›</span>
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </Reveal>
-
-      {/* FEATURED */}
-      <Reveal as="section" className="collection-surface max-w-7xl mx-auto px-4 py-12 sm:px-8 sm:py-16 mb-24">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <p className="section-index">01 / SELECTED PIECES</p>
-            <h2 className="font-display text-4xl tracking-wide">THE EDIT</h2>
-            <p className="text-graphite text-sm mt-1">Pieces selected for your everyday rotation.</p>
-          </div>
-        </div>
-        {loading ? (
-          <SkeletonGrid />
-        ) : featured.length === 0 ? (
-          <EmptyRow text="No featured products yet." />
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8">
-            {featured.map((p) => <ProductCard key={p.id} product={p} />)}
-          </div>
-        )}
-      </Reveal>
-
-      {/* NEW ARRIVALS */}
-      <Reveal as="section" className="max-w-7xl mx-auto px-4 sm:px-6 pb-24">
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="font-display text-4xl tracking-wide">NEW ARRIVALS</h2>
-          <Link to="/new-arrivals" className="text-xs tracking-widest2 text-white border-b border-white pb-0.5 hover:opacity-70">
-            VIEW ALL
-          </Link>
-        </div>
-        {loading ? (
-          <SkeletonGrid />
-        ) : newArrivals.length === 0 ? (
-          <EmptyRow text="No new arrivals yet." />
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8">
-            {newArrivals.map((p) => <ProductCard key={p.id} product={p} />)}
-          </div>
-        )}
-      </Reveal>
-
-      {/* EDITORIAL BANNER */}
-      <Reveal as="section" className="editorial-banner relative h-[65svh] min-h-[420px] flex items-center">
-        <img
-          src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=1800&auto=format&fit=crop"
-          alt=""
-          className="editorial-image absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-ink/50" />
-        <div className="relative z-10 max-w-xl px-6 sm:px-10">
-          <h2 className="font-display text-mist text-5xl tracking-wide mb-4">WORN WITH INTENT</h2>
-          <p className="text-silver text-sm sm:text-base">
-            Every piece is chosen for how it moves, fits and lasts — fashion built for real days, not just photos.
-          </p>
-        </div>
-      </Reveal>
-
-      {/* BRAND PHILOSOPHY */}
-      <Reveal as="section" className="max-w-4xl mx-auto text-center px-6 py-24">
-        <h2 className="font-display text-4xl tracking-wide mb-6">LESS, BUT BETTER</h2>
-        <p className="text-graphite leading-relaxed">
-          We'd rather make one shirt well than ten shirts fast. Retro Clothing exists for men who
-          want their wardrobe to feel deliberate — a small, confident collection instead of endless noise.
-        </p>
-      </Reveal>
-
-      {/* INSTAGRAM */}
-      <Reveal as="section" className="bg-charcoal text-mist py-20 px-6 text-center">
-        <Instagram size={28} className="mx-auto mb-4 text-silver" />
-        <h2 className="font-display text-3xl tracking-wide mb-2">FOLLOW THE RETRO</h2>
-        <p className="text-silver text-sm mb-6">Discover the latest from Retro Clothing.</p>
-        <a
-  href="https://www.instagram.com/retroclothing_.in?stkn=Z2Vndnh0dXhyb3Rl"
-  target="_blank"
-  rel="noreferrer"
-  className="inline-block border border-mist px-7 py-3 text-xs tracking-widest2 hover:bg-mist hover:text-ink transition-colors duration-250 focus-ring"
->
-  @RETROCLOTHING_.IN
-</a>
-      </Reveal>
-
-      {/* STORE */}
-      <Reveal as="section" id="store" className="max-w-5xl mx-auto px-6 py-24 grid sm:grid-cols-2 gap-10 items-center scroll-mt-20">
-        <div>
-          <h2 className="font-display text-4xl tracking-wide mb-4">VISIT THE STORE</h2>
-          <p className="text-graphite text-sm flex items-start gap-2 mb-6">
-            <MapPin size={16} className="mt-0.5 shrink-0" />
-            33/A Mela Mount Road, Rajiv Gandhi Nagar, Valukodai, Tirunelveli, Tamil Nadu – 627006
-          </p>
-          <p className="text-graphite text-sm flex items-center gap-2 mb-6">
-            <Clock3 size={16} className="shrink-0" /> Saturday &amp; Sunday, 6 PM – 10 PM
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <a href="https://maps.app.goo.gl/86kZcDQkkMHZznqq7?g_st=ac" target="_blank" rel="noreferrer" className="bg-ink text-mist px-5 py-2.5 text-xs tracking-widest2 hover:bg-graphite transition-colors">
-              GET DIRECTIONS
-            </a>
-            <a href="tel:7358274739" className="border border-white text-white px-5 py-2.5 text-xs tracking-widest2 hover:bg-ink hover:text-mist transition-colors inline-flex items-center gap-2">
-              <Phone size={13} /> CALL STORE
-            </a>
-          </div>
-        </div>
-        <div className="aspect-video bg-bone overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1200&auto=format&fit=crop" alt="Retro Clothing store" className="w-full h-full object-cover" loading="lazy" />
-        </div>
-      </Reveal>
-
-      {/* WHATSAPP CTA */}
-      <section className="bg-ink text-mist text-center py-16 px-6">
-        <h2 className="font-display text-3xl tracking-wide mb-3">ORDER DIRECTLY ON WHATSAPP</h2>
-        <p className="text-silver text-sm mb-6">No accounts, no hassle — just message us your size and we'll confirm.</p>
-        <a
-  href="https://wa.me/918667873216"
-  target="_blank"
-  rel="noreferrer"
-  className="inline-block bg-mist text-ink px-7 py-3 text-xs tracking-widest2 hover:bg-silver transition-colors focus-ring shine-btn"
->
-  MESSAGE US
-</a>
-      </section>
-    </div>
-  )
+  return <div>
+    <MobileHero />
+    <section className="home-hero relative h-[82svh] min-h-[520px] sm:h-[92vh] sm:min-h-[620px] flex items-end overflow-hidden">
+      <picture className="absolute inset-0 w-full h-full"><source media="(max-width: 768px)" srcSet="/hero-mobile.jpg" /><img src="/hero-desktop.jpg" alt="Retro Clothing" className="home-hero-image w-full h-full object-cover" fetchPriority="high" /></picture>
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/5" />
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-5 sm:px-10 pb-16 sm:pb-24"><p className="text-silver text-xs tracking-widest2 mb-4 animate-rise-1">RETRO CLOTHING · TIRUNELVELI</p><h1 className="font-display text-mist text-6xl min-[375px]:text-7xl sm:text-9xl leading-[.82] tracking-wide mb-6 animate-rise-2">DEFINE<br />YOUR STYLE.</h1><p className="text-silver max-w-sm mb-8 text-sm sm:text-base animate-rise-3">Luxury made affordable. Menswear with a timeless point of view.</p><div className="flex flex-col min-[375px]:flex-row gap-3 animate-rise-4"><Link to="/shop" className="bg-mist text-ink px-6 py-3.5 text-center text-xs tracking-widest2 focus-ring shine-btn">SHOP COLLECTION</Link><Link to="/new-arrivals" className="border border-mist text-mist px-6 py-3.5 text-center text-xs tracking-widest2 focus-ring">NEW ARRIVALS</Link></div></div>
+    </section>
+    <Reveal as="section" className="max-w-5xl mx-auto text-center px-6 py-24 sm:py-32"><p className="text-xs tracking-widest2 text-graphite mb-4">EST. 2026 · TIRUNELVELI</p><h2 className="font-display text-5xl sm:text-7xl tracking-wide mb-6">CLASSIC IS<br />TIMELESS.</h2><p className="text-graphite leading-relaxed max-w-xl mx-auto">RETRO CLOTHING is a men&apos;s fashion store by Balaji and Surya Perumal. Discover shirts, tees and pants selected for your individual style.</p></Reveal>
+    <Reveal as="section" className="px-4 sm:px-6 pb-24"><div className="max-w-7xl mx-auto"><div className="mb-7"><p className="section-index">01 / SHOP THE EDIT</p><h2 className="font-display text-4xl sm:text-5xl">SHOP BY CATEGORY</h2></div><div className="grid md:grid-cols-3 gap-3 sm:gap-4">{categories.map((category, index) => { const product = products.find((item) => item.category === category.key && item.images?.[0]?.url); return <Link key={category.key} to={`/shop/${category.key}`} className="group relative aspect-[4/5] md:aspect-[3/4] overflow-hidden block focus-ring"><img src={product?.images?.[0]?.url || (index === 1 ? '/hero-mobile.jpg' : '/hero-desktop.jpg')} alt={category.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-400 group-hover:scale-105" loading="lazy" /><div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" /><div className="absolute inset-x-0 bottom-0 p-6"><h3 className="font-display text-mist text-4xl tracking-wide">{category.label}</h3><p className="text-silver text-sm mt-1 mb-3">{category.desc}</p><span className="text-mist text-xs tracking-widest2">EXPLORE →</span></div></Link> })}</div></div></Reveal>
+    <ProductSection title="THE EDIT" eyebrow="02 / SELECTED PIECES" products={featured} loading={loading} />
+    <ProductSection title="NEW ARRIVALS" eyebrow="03 / JUST IN" products={newArrivals} loading={loading} link="/new-arrivals" />
+    <Reveal as="section" className="editorial-banner relative h-[65svh] min-h-[420px] flex items-center"><img src="/hero-desktop.jpg" alt="Retro Clothing editorial" className="editorial-image absolute inset-0 w-full h-full object-cover" loading="lazy" /><div className="absolute inset-0 bg-black/55" /><div className="relative z-10 max-w-xl px-6 sm:px-10"><p className="text-xs tracking-widest2 text-silver mb-4">RETRO CLOTHING</p><h2 className="font-display text-mist text-6xl sm:text-7xl tracking-wide mb-4">WORN WITH INTENT</h2><p className="text-silver text-sm sm:text-base">A focused wardrobe of shirts, tees and pants—made for the everyday, styled your way.</p></div></Reveal>
+    <section className="marquee-strip" aria-label="Retro Clothing brand values"><div>RETRO CLOTHING <span>•</span> DEFINE YOUR STYLE <span>•</span> LUXURY MADE AFFORDABLE <span>•</span> RETRO CLOTHING <span>•</span> DEFINE YOUR STYLE <span>•</span></div></section>
+    <Reveal as="section" className="bg-charcoal text-mist py-20 px-6 text-center"><Instagram size={28} className="mx-auto mb-4 text-silver" /><h2 className="font-display text-4xl tracking-wide mb-2">FOLLOW THE RETRO</h2><p className="text-silver text-sm mb-6">The latest pieces, looks and store updates.</p><a href="https://www.instagram.com/retroclothing_.in/" target="_blank" rel="noreferrer" className="inline-block border border-mist px-7 py-3 text-xs tracking-widest2 focus-ring">@RETROCLOTHING_.IN</a></Reveal>
+    <Reveal as="section" id="store" className="max-w-5xl mx-auto px-6 py-24 grid sm:grid-cols-2 gap-10 items-center scroll-mt-20"><div><p className="section-index">VISIT US</p><h2 className="font-display text-5xl tracking-wide mb-4">RETRO CLOTHING<br />TIRUNELVELI</h2><p className="text-graphite text-sm flex items-start gap-2 mb-7"><MapPin size={16} className="mt-0.5 shrink-0" />33/A Mela Mount Road, Rajiv Gandhi Nagar, Valukodai, Town, Tirunelveli, Tamil Nadu – 627006</p><div className="flex flex-wrap gap-3"><a href="https://maps.app.goo.gl/86kZcDQkkMHZznqq7?g_st=ac" target="_blank" rel="noreferrer" className="bg-mist text-ink px-5 py-3 text-xs tracking-widest2">GET DIRECTIONS</a><a href="tel:7358274739" className="border border-white text-mist px-5 py-3 text-xs tracking-widest2 inline-flex items-center gap-2"><Phone size={13} /> CALL STORE</a><a href="https://wa.me/918667873216" target="_blank" rel="noreferrer" className="border border-white text-mist px-5 py-3 text-xs tracking-widest2">WHATSAPP</a></div></div><FlickerWordmark /></Reveal>
+  </div>
 }
 
-function SkeletonGrid() {
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i}>
-          <div className="skeleton aspect-[3/4]" />
-          <div className="skeleton h-3 w-3/4 mt-3" />
-          <div className="skeleton h-3 w-1/3 mt-2" />
-        </div>
-      ))}
-    </div>
-  )
+function MobileHero() {
+  return <section className="mobile-hero relative min-h-[calc(100svh-42px)] overflow-hidden px-5 pt-24 pb-8">
+    <p className="relative z-10 text-silver text-[10px] tracking-widest2 mobile-hero-copy">RETRO CLOTHING / TIRUNELVELI</p>
+    <h1 className="relative z-10 font-display text-mist text-[clamp(4.25rem,19vw,6.4rem)] leading-[.78] tracking-wide mt-4 mobile-hero-copy mobile-hero-copy-title">DEFINE<br />YOUR STYLE.</h1>
+    <div className="mobile-hero-stage" aria-hidden="true"><div className="mobile-hero-card"><img src="/hero-mobile.jpg" alt="" fetchPriority="high" /></div></div>
+    <p className="relative z-10 text-silver max-w-[17rem] mt-6 text-sm mobile-hero-copy">Luxury made affordable. Menswear with a timeless point of view.</p>
+    <div className="relative z-10 grid grid-cols-2 gap-3 mt-6 mobile-hero-copy"><Link to="/shop" className="bg-mist text-ink px-3 py-3.5 text-center text-[10px] tracking-widest2 focus-ring">SHOP</Link><Link to="/new-arrivals" className="border border-mist text-mist px-3 py-3.5 text-center text-[10px] tracking-widest2 focus-ring">NEW IN</Link></div>
+  </section>
 }
 
-export function EmptyRow({ text }) {
-  return <p className="text-graphite text-sm py-10 text-center border border-dashed border-bone">{text}</p>
+function FlickerWordmark() {
+  return <div className="flicker-wordmark" aria-label="Retro Clothing"><span aria-hidden="true">RETRO<br />CLOTHING</span></div>
 }
+
+function ProductSection({ title, eyebrow, products, loading, link }) { return <Reveal as="section" className="collection-surface max-w-7xl mx-auto px-4 py-12 sm:px-8 sm:py-16 mb-24"><div className="flex items-end justify-between gap-4 mb-8"><div><p className="section-index">{eyebrow}</p><h2 className="font-display text-4xl">{title}</h2></div>{link && <Link to={link} className="text-xs tracking-widest2 text-mist border-b border-mist pb-1">VIEW ALL</Link>}</div>{loading ? <SkeletonGrid /> : products.length ? <div className="product-rail">{products.map((product) => <ProductCard key={product.id} product={product} />)}</div> : <EmptyRow text="No products yet." />}</Reveal> }
+function SkeletonGrid() { return <div className="product-rail">{Array.from({ length: 4 }).map((_, i) => <div key={i}><div className="skeleton aspect-[3/4]" /><div className="skeleton h-3 w-3/4 mt-3" /></div>)}</div> }
+export function EmptyRow({ text }) { return <p className="text-graphite text-sm py-10 text-center border border-dashed border-bone">{text}</p> }

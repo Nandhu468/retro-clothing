@@ -67,7 +67,7 @@ export default function Shop() {
         <h1 className="font-display text-4xl sm:text-5xl tracking-wide">{title}</h1>
         <button
           onClick={() => setFilterOpen(true)}
-          className="md:hidden flex items-center gap-2 text-xs tracking-widest2 text-white border border-white px-4 py-2 focus-ring"
+          className="md:hidden flex items-center gap-2 text-xs tracking-widest2 text-mist border border-white px-4 py-2 focus-ring"
         >
           <SlidersHorizontal size={14} /> FILTER
         </button>
@@ -138,7 +138,7 @@ function FilterPanel({ sizeFilter, setSizeFilter, availOnly, setAvailOnly, sort,
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="w-full border border-bone px-3 py-2 text-sm bg-mist focus-ring"
+          className="w-full border border-bone px-3 py-2 text-sm bg-mist text-ink focus-ring"
         >
           <option value="featured">Featured</option>
           <option value="newest">Newest</option>
@@ -156,7 +156,7 @@ function FilterPanel({ sizeFilter, setSizeFilter, availOnly, setAvailOnly, sort,
               key={s}
               onClick={() => toggleSize(s)}
               className={`w-10 h-10 text-xs border focus-ring ${
-                sizeFilter.includes(s) ? 'bg-ink text-mist border-ink' : 'border-bone hover:border-ink'
+                sizeFilter.includes(s) ? 'bg-ink text-mist border-ink' : 'border-bone text-mist hover:border-ink'
               }`}
             >
               {s}
@@ -165,7 +165,7 @@ function FilterPanel({ sizeFilter, setSizeFilter, availOnly, setAvailOnly, sort,
         </div>
       </div>
 
-      <label className="flex items-center gap-2 text-sm cursor-pointer">
+      <label className="flex items-center gap-2 text-sm text-mist cursor-pointer">
         <input type="checkbox" checked={availOnly} onChange={(e) => setAvailOnly(e.target.checked)} className="accent-ink" />
         In stock only
       </label>

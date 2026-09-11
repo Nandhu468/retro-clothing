@@ -38,6 +38,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [pathname])
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
   function submitSearch(e) {
     e.preventDefault()
     if (!query.trim()) return
@@ -79,11 +84,11 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3 sm:gap-5 text-mist">
+        <div className="flex items-center gap-1 sm:gap-5 text-mist">
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
-            className="min-w-11 min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
+            className="hidden md:flex min-w-11 min-h-11 items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
           >
             <Search size={19} />
           </button>
@@ -95,10 +100,10 @@ export default function Navbar() {
               </span>
             )}
           </Link>
-          <Link to="/cart" aria-label="Cart" data-cart-icon className="relative hover:text-silver transition-colors focus-ring rounded-sm">
+          <Link to="/cart" aria-label="Cart" data-cart-icon className="relative min-w-11 min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm">
             <ShoppingBag size={19} />
             {count > 0 && (
-              <span className="absolute -top-2 -right-2 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute top-1 right-1 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
                 {count}
               </span>
             )}

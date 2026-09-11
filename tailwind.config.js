@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#1c130d',
-        charcoal: '#342116',
-        graphite: '#56351b',
-        mist: '#f3dfae',
-        bone: '#d8b76f',
-        silver: '#bf9150',
+        ink: '#101010',
+        charcoal: '#1b1b1b',
+        graphite: '#737373',
+        mist: '#f5f5f2',
+        bone: '#d8d8d3',
+        silver: '#ababaa',
       },
       fontFamily: {
         display: ['Bungee', '"Bebas Neue"', 'Oswald', 'sans-serif'],
