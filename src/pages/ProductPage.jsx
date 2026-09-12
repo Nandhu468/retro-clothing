@@ -167,7 +167,7 @@ export default function ProductPage() {
           <p className="text-xs tracking-widest2 text-graphite mb-2">{product.category?.toUpperCase()}</p>
           <h1 className="font-display text-4xl tracking-wide mb-3">{product.name}</h1>
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-xl">₹{Number(product.price).toFixed(0)}</span>
+            <span className="text-2xl font-semibold text-mist">₹{Number(product.price).toFixed(0)}</span>
             <StockBadge stock={product.stock} />
           </div>
 
@@ -215,12 +215,12 @@ export default function ProductPage() {
 
           <div className="mb-6">
             <h3 className="text-xs tracking-widest2 text-graphite mb-2">QUANTITY</h3>
-            <div className="flex items-center border border-bone w-fit">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-10 h-10 focus-ring">−</button>
-              <span className="w-10 text-center text-sm">{qty}</span>
+            <div className="flex items-center border border-bone w-fit bg-charcoal/40">
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-10 h-10 text-mist hover:bg-bone transition-colors focus-ring text-base">−</button>
+              <span className="w-10 text-center text-sm font-semibold text-mist">{qty}</span>
               <button
                 onClick={() => setQty((q) => Math.min(product.stock || 1, q + 1))}
-                className="w-10 h-10 focus-ring"
+                className="w-10 h-10 text-mist hover:bg-bone transition-colors focus-ring text-base"
                 disabled={qty >= product.stock}
               >
                 +
@@ -232,24 +232,32 @@ export default function ProductPage() {
             <button
               onClick={handleAddToCart}
               disabled={product.stock <= 0 || (product.sizes?.length && !size)}
-              className="bg-ink text-mist py-3.5 text-xs tracking-widest2 hover:bg-graphite transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-ring"
+              className="bg-ink text-mist border border-white/20 py-3.5 text-xs tracking-widest2 hover:bg-graphite transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-ring"
             >
-              {added ? 'ADDED TO CART' : product.stock <= 0 ? 'SOLD OUT' : 'ADD TO CART'}
+              {added
+                ? 'ADDED TO CART'
+                : product.stock <= 0
+                ? 'SOLD OUT'
+                : product.sizes?.length && !size
+                ? 'SELECT A SIZE'
+                : 'ADD TO CART'}
             </button>
             <a
               href={whatsappLink(message)}
               target="_blank"
               rel="noreferrer"
-              className="border border-ink py-3.5 text-xs tracking-widest2 text-center hover:bg-ink hover:text-mist transition-colors focus-ring"
+              className="border border-white/30 text-mist py-3.5 text-xs tracking-widest2 text-center hover:bg-mist hover:text-ink transition-colors focus-ring"
             >
               ORDER ON WHATSAPP
             </a>
             <button
               onClick={() => toggle(product)}
-              className="flex items-center justify-center gap-2 py-2 text-xs tracking-widest2 text-graphite hover:text-ink focus-ring"
+              className="flex items-center justify-center gap-2 py-2 text-xs tracking-widest2 text-mist hover:text-white transition-colors focus-ring"
             >
-              <Heart size={14} className={isWishlisted(product.id) ? 'fill-ink text-ink' : ''} />
-              {isWishlisted(product.id) ? 'IN WISHLIST' : 'ADD TO WISHLIST'}
+              <Heart size={15} className={isWishlisted(product.id) ? 'fill-red-500 text-red-500 stroke-red-500' : 'text-mist stroke-mist'} />
+              <span className={isWishlisted(product.id) ? 'text-red-400 font-semibold' : 'text-mist'}>
+                {isWishlisted(product.id) ? 'IN WISHLIST' : 'ADD TO WISHLIST'}
+              </span>
             </button>
             <button
               type="button"

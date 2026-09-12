@@ -12,8 +12,9 @@ export default {
         silver: '#ababaa',
       },
       fontFamily: {
-        display: ['Bungee', '"Bebas Neue"', 'Oswald', 'sans-serif'],
-        body: ['"Inter"', 'system-ui', 'sans-serif'],
+        display: ['"Syne"', '"Urbanist"', 'sans-serif'],
+        body: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
         widest2: '0.28em',

@@ -1,0 +1,6 @@
+{
+  "name": "Retro Clothing",
+  "description": "Men's fashion and streetwear storefront for Retro Clothing in Tirunelveli, Tamil Nadu, featuring shirts, tees, pants, WhatsApp ordering, cart, and admin dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '918667873216'
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '918610898158'
 
 export function buildSingleProductMessage({ name, size, quantity, price }) {
   const lines = [

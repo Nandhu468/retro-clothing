@@ -16,7 +16,6 @@ const mobileLinks = [
   { to: '/shop/shirts', label: 'SHIRTS' },
   { to: '/shop/t-shirts', label: 'TEES' },
   { to: '/shop/pants', label: 'PANTS' },
-  { to: '/#store', label: 'TIRUNELVELI' },
   { to: '/contact', label: 'CONTACT' },
 ]
 
@@ -60,9 +59,9 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between">
-              <Link to="/" className="flex items-center gap-2 focus-ring rounded-sm logo-pulse">
-          <img src="/logo.jpg" alt="Retro Clothing" className="h-10 w-10 rounded-full object-cover" />
-          <span className="hidden sm:block text-mist font-display text-2xl tracking-widest2 leading-none">
+        <Link to="/" className="flex items-center gap-2 focus-ring rounded-sm logo-pulse">
+          <img src="/logo.jpg" alt="Retro Clothing" className="h-9 w-9 sm:h-10 sm:w-10 rounded-full object-cover" />
+          <span className="text-mist font-display text-xl sm:text-2xl tracking-widest2 leading-none">
             RETRO
           </span>
         </Link>
@@ -84,33 +83,42 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-5 text-mist">
+        <div className="flex items-center gap-1 sm:gap-4 text-mist">
           <button
             aria-label="Search"
             onClick={() => setSearchOpen(true)}
-            className="hidden md:flex min-w-11 min-h-11 items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
+            className="min-w-9 min-h-9 sm:min-w-11 sm:min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
           >
-            <Search size={19} />
+            <Search size={18} />
           </button>
-          <Link to="/wishlist" aria-label="Wishlist" className="relative hidden sm:block hover:text-silver transition-colors focus-ring rounded-sm">
-            <Heart size={19} />
+          <Link
+            to="/wishlist"
+            aria-label="Wishlist"
+            className="relative min-w-9 min-h-9 sm:min-w-11 sm:min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
+          >
+            <Heart size={18} />
             {wishItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
                 {wishItems.length}
               </span>
             )}
           </Link>
-          <Link to="/cart" aria-label="Cart" data-cart-icon className="relative min-w-11 min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm">
-            <ShoppingBag size={19} />
+          <Link
+            to="/cart"
+            aria-label="Cart"
+            data-cart-icon
+            className="relative min-w-9 min-h-9 sm:min-w-11 sm:min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
+          >
+            <ShoppingBag size={18} />
             {count > 0 && (
-              <span className="absolute top-1 right-1 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 bg-mist text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
                 {count}
               </span>
             )}
           </Link>
           <button
             aria-label="Menu"
-            className="md:hidden min-w-11 min-h-11 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
+            className="md:hidden min-w-9 min-h-9 flex items-center justify-center hover:text-silver transition-colors focus-ring rounded-sm"
             onClick={() => setMenuOpen(true)}
           >
             <Menu size={22} />

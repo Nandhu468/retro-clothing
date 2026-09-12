@@ -72,13 +72,14 @@ export default function ProductCard({ product }) {
       </button>
       <button
         type="button"
+        data-wishlist-toggle
         aria-label={`Toggle ${product.name} wishlist`}
         onClick={() => toggle(product)}
-        className="absolute top-2 right-2 bg-mist/90 rounded-full p-2 focus-ring"
+        className="absolute top-2.5 right-2.5 bg-white text-ink hover:bg-mist rounded-full p-2 focus-ring shadow-sm transition-transform active:scale-90 z-10"
       >
         <Heart
           size={16}
-          className={isWishlisted(product.id) ? 'fill-ink text-ink' : 'text-ink'}
+          className={isWishlisted(product.id) ? 'fill-red-500 text-red-500 stroke-red-500' : 'text-neutral-900 stroke-neutral-900'}
         />
       </button>
     </div>

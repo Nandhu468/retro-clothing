@@ -15,6 +15,9 @@ export default function Cart() {
   function beginRemoval(item) {
     const key = removalKey(item)
     setRemovingItems((current) => (current.includes(key) ? current : [...current, key]))
+    setTimeout(() => {
+      completeRemoval(item)
+    }, 450)
   }
 
   function completeRemoval(item) {
@@ -67,12 +70,12 @@ export default function Cart() {
                 </button>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center border border-bone">
-                  <button onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)} className="w-8 h-8 flex items-center justify-center focus-ring">
+                <div className="flex items-center border border-bone bg-charcoal/40">
+                  <button onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)} className="w-8 h-8 flex items-center justify-center text-mist hover:bg-bone focus-ring">
                     <Minus size={12} />
                   </button>
-                  <span className="w-8 text-center text-sm">{item.quantity}</span>
-                  <button onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)} className="w-8 h-8 flex items-center justify-center focus-ring">
+                  <span className="w-8 text-center text-sm font-semibold text-mist">{item.quantity}</span>
+                  <button onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)} className="w-8 h-8 flex items-center justify-center text-mist hover:bg-bone focus-ring">
                     <Plus size={12} />
                   </button>
                 </div>

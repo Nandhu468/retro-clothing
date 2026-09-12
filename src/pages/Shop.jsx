@@ -103,11 +103,13 @@ export default function Shop() {
       {/* Mobile filter drawer */}
       {filterOpen && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end md:hidden">
-          <div className="absolute inset-0 bg-ink/60" onClick={() => setFilterOpen(false)} />
-          <div className="relative bg-mist rounded-t-2xl p-6 max-h-[80vh] overflow-y-auto">
+          <div className="absolute inset-0 bg-ink/75" onClick={() => setFilterOpen(false)} />
+          <div className="relative bg-[#191919] border-t border-[#383838] rounded-t-2xl p-6 max-h-[80vh] overflow-y-auto text-mist">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-2xl tracking-wide">FILTERS</h2>
-              <button onClick={() => setFilterOpen(false)} className="focus-ring"><X size={22} /></button>
+              <h2 className="font-display text-2xl tracking-wide text-mist">FILTERS</h2>
+              <button onClick={() => setFilterOpen(false)} className="text-silver hover:text-mist focus-ring p-1">
+                <X size={22} />
+              </button>
             </div>
             <FilterPanel
               sizeFilter={sizeFilter} setSizeFilter={setSizeFilter}
@@ -116,7 +118,7 @@ export default function Shop() {
             />
             <button
               onClick={() => setFilterOpen(false)}
-              className="mt-6 w-full bg-ink text-mist py-3 text-xs tracking-widest2"
+              className="mt-6 w-full bg-mist text-ink font-medium py-3 text-xs tracking-widest2 hover:bg-silver transition-colors"
             >
               SHOW {filtered.length} RESULTS
             </button>
@@ -138,7 +140,7 @@ function FilterPanel({ sizeFilter, setSizeFilter, availOnly, setAvailOnly, sort,
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="w-full border border-bone px-3 py-2 text-sm bg-mist text-ink focus-ring"
+          className="w-full border border-bone/60 px-3 py-2 text-sm bg-charcoal text-mist focus-ring"
         >
           <option value="featured">Featured</option>
           <option value="newest">Newest</option>
@@ -155,8 +157,10 @@ function FilterPanel({ sizeFilter, setSizeFilter, availOnly, setAvailOnly, sort,
             <button
               key={s}
               onClick={() => toggleSize(s)}
-              className={`w-10 h-10 text-xs border focus-ring ${
-                sizeFilter.includes(s) ? 'bg-ink text-mist border-ink' : 'border-bone text-mist hover:border-ink'
+              className={`w-10 h-10 text-xs border transition-colors focus-ring ${
+                sizeFilter.includes(s)
+                  ? 'bg-mist text-ink border-mist font-medium'
+                  : 'border-bone/60 text-silver hover:border-mist hover:text-mist'
               }`}
             >
               {s}
@@ -166,7 +170,7 @@ function FilterPanel({ sizeFilter, setSizeFilter, availOnly, setAvailOnly, sort,
       </div>
 
       <label className="flex items-center gap-2 text-sm text-mist cursor-pointer">
-        <input type="checkbox" checked={availOnly} onChange={(e) => setAvailOnly(e.target.checked)} className="accent-ink" />
+        <input type="checkbox" checked={availOnly} onChange={(e) => setAvailOnly(e.target.checked)} className="accent-mist" />
         In stock only
       </label>
     </div>

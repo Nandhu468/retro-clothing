@@ -1,6 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
-import AnnouncementBar from './components/AnnouncementBar'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import IntroScreen from './components/IntroScreen'
@@ -30,7 +29,6 @@ function StorefrontLayout({ children }) {
   const { pathname } = useLocation()
   return (
     <>
-      <AnnouncementBar />
       <Navbar />
       <main key={pathname} className="storefront-main">{children}</main>
       <Footer />
